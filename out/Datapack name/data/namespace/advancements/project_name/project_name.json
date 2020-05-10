@@ -1,0 +1,17 @@
+{
+     "criteria": {
+          "trigger": {
+               "trigger": "minecraft:tick"
+          }
+     },
+     "display": {
+          "announce_to_chat": false,
+          "description": "datapack description\n",
+          "icon": {
+               "item": "minecraft:"
+          },
+          "show_toast": false,
+          "title": "Datapack Name"
+     },
+     "parent": "global:namespace"
+}

@@ -1,0 +1,18 @@
+{
+     "criteria": {
+          "trigger": {
+               "trigger": "minecraft:tick"
+          }
+     },
+     "display": {
+          "announce_to_chat": false,
+          "description": "",
+          "icon": {
+               "item": "minecraft:player_head",
+               "nbt": "{SkullOwner:{Name: \"Username\", Properties: {textures: [{Value: \"ewogICJ0aW1lc3RhbXAiIDogMTU4OTEwMzkzOTA3NCwKICAicHJvZmlsZUlkIiA6ICJhNzdkNGZmNjM5Nzk0MDJjYTFlZGU5MjJiOGQ4MzQ4MyIsCiAgInByb2ZpbGVOYW1lIiA6ICJVc2VybmFtZSIsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS80OTQ3MTFjNGMzNzc3OWI3ODhlZWRiYjIyNzFhZTg4YzA2MDE2NmMwNWJhOTc4MzZhNDY4YmE2NWRiMDNhZTlmIgogICAgfQogIH0KfQ==\"}]}}}"
+          },
+          "show_toast": false,
+          "title": "Username"
+     },
+     "parent": "global:root"
+}

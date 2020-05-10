@@ -1,0 +1,119 @@
+{
+   "window": {
+      "bg": "#262626"
+   },
+   "main_frame": {
+      "bg": "#262626"
+   },
+   "fields_frame": {
+      "bg": "#404040",
+      "padx": 5,
+      "pady": 15
+   },
+   "buttons_frame": {
+      "bg": "#262626",
+      "padx": 10,
+      "pady": 10
+   },
+   "title": {
+      "fg": "#ffffff",
+      "bg": "#262626",
+      "font": [
+         "Courier New",
+         "28"
+      ],
+      "justify": "left",
+      "anchor": "w",
+      "padx": 5,
+      "pady": 5
+   },
+   "title_image": {
+      "bg": "#262626"
+   },
+   "message": {
+      "fg": "#e0e0e0",
+      "bg": "#262626",
+      "font": [
+         "Consolas",
+         "10"
+      ],
+      "wraplength": 650,
+      "justify": "left",
+      "anchor": "nw",
+      "pady": 5
+   },
+   "github_link": {
+      "fg": "#e0e0e0",
+      "bg": "#262626",
+      "font": [
+         "Consolas",
+         "8"
+      ],
+      "anchor": "e",
+      "compound": "right",
+      "padx": 5,
+      "pady": 1
+   },
+   "header": {
+      "fg": "#ffffff",
+      "bg": "#404040",
+      "font": [
+         "Consolas",
+         "14",
+         "bold"
+      ],
+      "justify": "left",
+      "anchor": "w",
+      "pady": 5
+   },
+   "entry_text": {
+      "fg": "#ffffff",
+      "bg": "#404040",
+      "width": 25,
+      "font": [
+         "Consolas",
+         "12"
+      ],
+      "anchor": "w",
+      "padx": 2
+   },
+   "entry": {
+      "fg": "#ffffff",
+      "bg": "#505050",
+      "width": 45,
+      "highlightbackground": "#505050",
+      "highlightcolor": "#e0e0e0",
+      "highlightthickness": 1,
+      "bd": 0,
+      "font": [
+         "Consolas",
+         "12"
+      ]
+   },
+   "text": {
+      "fg": "#ffffff",
+      "bg": "#505050",
+      "width": 45,
+      "height": 3,
+      "highlightbackground": "#505050",
+      "highlightcolor": "#e0e0e0",
+      "highlightthickness": 1,
+      "bd": 0,
+      "font": [
+         "Consolas",
+         "12"
+      ]
+   },
+   "button": {
+      "fg": "#ffffff",
+      "bg": "#505050",
+      "width": 15,
+      "height": 2,
+      "font": [
+         "Consolas",
+         "12",
+         "bold"
+      ],
+      "bd": 0
+   }
+}
