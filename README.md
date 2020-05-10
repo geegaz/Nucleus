@@ -1,9 +1,12 @@
 # VisualNucleus
 An UI port of [Gnottero's Nucleus](https://github.com/Gnottero/Nucleus) written with Python 3 and Tkinter
 
->This Python Script require the 'Requests' module to work.
-You can install it using the following command:<br>
+This Python Script require the 'Requests' module to work.
+You can install it using the following command:
+
 `pip install requests`
+
+<br>
 
 ![](resources/screenshot.png)
 

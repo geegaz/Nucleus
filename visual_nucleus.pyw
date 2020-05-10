@@ -48,7 +48,7 @@ class UI(tk.Frame):
         "success": 'Sucessfuly generated {} in "{}"',
     }
     default_values = {
-        "dev_name": "Player name",
+        "dev_name": "Player_name",
         "dp_name": "Datapack name",
         "dp_desc": "datapack description",
         "dp_item": "minecraft:name_tag",
@@ -296,7 +296,10 @@ class UI(tk.Frame):
             values["tick_name"] = tick_name
         if len(load_name) != 0:
             values["load_name"] = load_name
-        if len(dp_path) != 0:
+        if len(dp_path) == 0:
+            if not os.path.exists(values["dp_path"]):
+                os.makedirs(values["dp_path"])
+        else:
             values["dp_path"] = dp_path
 
         return values
