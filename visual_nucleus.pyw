@@ -6,11 +6,13 @@ This is an UI port of Nucleus by Gnottero
 # Import all the required libraries
 import json
 import os
+import re
 import tkinter as tk
 import webbrowser
 
 try:
     import requests
+
     requests_present = True
 except:
     requests_present = False
@@ -39,17 +41,15 @@ class UI(tk.Frame):
     messages = {
         "init": 'Fill in the fields and click "Generate". Empty fields will use default values.',
         "requests_absent": "You don't have the requests module installed, please refer to the github for how to install it (link in the bottom corner).",
-        "invalid_path": 'Invalid datapack folder path "{}". Check it and and try again.',
-        "invalid_folder": 'Error creating folder "{}". Check the fields and and try again.',
-        "invalid_tick_name": 'Invalid ticking function name "{}". Check it and and try again.',
-        "invalid_load_name": 'Invalid ticking function name "{}". Check it and and try again.',
-        "invalid_player_name": 'Invalid player name. Check the fields and and try again.',
+        "invalid_path": 'Invalid path "{}". Check it and and try again.',
+        "path_error": 'Error creating folder "{}". Check the fields and and try again.',
+        "invalid_player_name": "Invalid player name. Check the fields and and try again.",
         "generating": "Generating...",
         "success": 'Sucessfuly generated {} in "{}"',
     }
     default_values = {
-        "dev_name": "Player_name",
-        "dp_name": "Datapack name",
+        "dev_name": "Player_Name",
+        "dp_name": "Datapack_Name",
         "dp_desc": "datapack description",
         "dp_item": "minecraft:name_tag",
         "project_name": "project_name",
@@ -246,35 +246,40 @@ class UI(tk.Frame):
         """
         values = self.default_values.copy()
 
-        dev_name = self.fields_frame.fields["ENTRY_dev_name"]["entry"].get()
-        dp_name = self.fields_frame.fields["ENTRY_dp_name"]["entry"].get()
+        dev_name = re.sub(
+            r"\W+", "_", self.fields_frame.fields["ENTRY_dev_name"]["entry"].get()
+        )
+        dp_name = re.sub(
+            r"\W+", "_", self.fields_frame.fields["ENTRY_dp_name"]["entry"].get()
+        )
         dp_desc = self.fields_frame.fields["TEXT_dp_desc"]["text"].get(1.0, tk.END)
-        dp_item = self.fields_frame.fields["ENTRY_dp_item"]["entry"].get()
+        dp_item = re.sub(
+            r"[^\w:]+",
+            "_",
+            (self.fields_frame.fields["ENTRY_dp_item"]["entry"].get().lower()),
+        )
 
-        project_name = (
-            self.fields_frame.fields["ENTRY_project_name"]["entry"]
-            .get()
-            .replace(" ", "_")
-            .lower()
+        project_name = re.sub(
+            r"\W+",
+            "_",
+            (self.fields_frame.fields["ENTRY_project_name"]["entry"].get().lower()),
         )
-        namespace = (
-            self.fields_frame.fields["ENTRY_namespace"]["entry"]
-            .get()
-            .replace(" ", "_")
-            .lower()
+        namespace = re.sub(
+            r"\W+",
+            "_",
+            (self.fields_frame.fields["ENTRY_namespace"]["entry"].get().lower()),
         )
-        tick_name = (
-            self.fields_frame.fields["ENTRY_tick_name"]["entry"]
-            .get()
-            .replace(" ", "_")
-            .lower()
+        tick_name = re.sub(
+            r"\W+",
+            "_",
+            (self.fields_frame.fields["ENTRY_tick_name"]["entry"].get().lower()),
         )
-        load_name = (
-            self.fields_frame.fields["ENTRY_load_name"]["entry"]
-            .get()
-            .replace(" ", "_")
-            .lower()
+        load_name = re.sub(
+            r"\W+",
+            "_",
+            (self.fields_frame.fields["ENTRY_load_name"]["entry"].get().lower()),
         )
+
         dp_path = self.fields_frame.fields["ENTRY_dp_path"]["entry"].get()
 
         if len(dev_name) > 0:
@@ -287,15 +292,21 @@ class UI(tk.Frame):
             values["dp_item"] = dp_item
 
         if len(project_name) == 0:
-            project_name = values["dp_name"].replace(" ", "_").lower()
+            project_name = values["dp_name"].lower()
         values["project_name"] = project_name
+
         if len(namespace) == 0:
-            namespace = values["project_name"]
+            namespace = values["dev_name"].lower()
         values["namespace"] = namespace
+
         if len(tick_name) != 0:
             values["tick_name"] = tick_name
         if len(load_name) != 0:
             values["load_name"] = load_name
+        if values["load_name"] == values["tick_name"]:
+            values["tick_name"] += "_tick"
+            values["load_name"] += "_load"
+
         if len(dp_path) == 0:
             if not os.path.exists(values["dp_path"]):
                 os.makedirs(values["dp_path"])
@@ -312,10 +323,12 @@ class UI(tk.Frame):
         self.message_label.update()  # updates the message box
         values = self.get_values()
 
-        if not os.path.exists(values['dp_path']):
-            self.message_text.set(self.messages["invalid_path"].format(values['dp_path']))
+        if not os.path.exists(values["dp_path"]):
+            self.message_text.set(
+                self.messages["invalid_path"].format(values["dp_path"])
+            )
             return
-        
+
         if not requests_present:
             self.message_text.set(self.messages["requests_absent"])
             return
@@ -335,7 +348,7 @@ class UI(tk.Frame):
             except FileExistsError:
                 pass
             except OSError:
-                self.message_text.set(self.messages["invalid_folder"].format(path))
+                self.message_text.set(self.messages["path_error"].format(path))
                 return
 
         # Generating pack.mcmeta
@@ -418,7 +431,7 @@ class UI(tk.Frame):
         with open(f"{mc_tags_path}/tick.json", "w") as f:
             f.write(json.dumps(mc_tick, indent=5, sort_keys=True))
 
-        # > Datapack-specific tick and load tags <#
+        # Datapack-specific tick and load tags
         ns_load = {
             "values": [
                 f"{values['namespace']}:{values['project_name']}/{values['load_name']}"
@@ -435,20 +448,12 @@ class UI(tk.Frame):
         with open(f"{dp_tags_path}/tick.json", "w") as f:
             f.write(json.dumps(ns_tick, indent=5, sort_keys=True))
 
-        # > Tick and Load functions <#
-        try:
-            with open(f"{dp_fun_path}/{values['tick_name']}.mcfunction", "w") as f:
-                f.write("#> This is the main function, that will run once per tick")
-        except:
-            self.message_text.set(self.messages["invalid_tick_name"].format(values['tick_name']))
-            return
-        try: 
-            with open(f"{dp_fun_path}/{values['load_name']}.mcfunction", "w") as f:
-                f.write("#> This function will run on datapack loading")
-        except:
-            self.message_text.set(self.messages["invalid_load_name"].format(values['load_name']))
-            return
-        
+        # Tick and Load functions
+        with open(f"{dp_fun_path}/{values['tick_name']}.mcfunction", "w") as f:
+            f.write("#> This is the main function, that will run once per tick")
+        with open(f"{dp_fun_path}/{values['load_name']}.mcfunction", "w") as f:
+            f.write("#> This function will run on datapack loading")
+
         self.message_text.set(
             self.messages["success"].format(values["dp_name"], values["dp_path"])
         )
