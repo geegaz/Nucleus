@@ -48,12 +48,12 @@ class UI(tk.Frame):
         "success": 'Sucessfuly generated {} in "{}"',
     }
     default_values = {
-        "dev_name": "Player_Name",
-        "dp_name": "Datapack_Name",
+        "dev_name": "Player_name",
+        "dp_name": "Datapack Name",
         "dp_desc": "datapack description",
         "dp_item": "minecraft:name_tag",
-        "project_name": "project_name",
-        "namespace": "namespace",
+        "project_name": "datapack_name",
+        "namespace": "player_name",
         "tick_name": "tick",
         "load_name": "load",
         "dp_path": "./out",
@@ -250,7 +250,7 @@ class UI(tk.Frame):
             r"\W+", "_", self.fields_frame.fields["ENTRY_dev_name"]["entry"].get()
         )
         dp_name = re.sub(
-            r"\W+", "_", self.fields_frame.fields["ENTRY_dp_name"]["entry"].get()
+            r"[^\w ]+", "_", self.fields_frame.fields["ENTRY_dp_name"]["entry"].get()
         )
         dp_desc = self.fields_frame.fields["TEXT_dp_desc"]["text"].get(1.0, tk.END)
         dp_item = re.sub(
@@ -289,10 +289,11 @@ class UI(tk.Frame):
         if len(dp_desc) > 1:
             values["dp_desc"] = dp_desc
         if len(dp_item) > 0:
-            values["dp_item"] = dp_item
+            if dp_item != "minecraft:":
+                values["dp_item"] = dp_item
 
         if len(project_name) == 0:
-            project_name = values["dp_name"].lower()
+            project_name = values["dp_name"].replace(" ", "_").lower()
         values["project_name"] = project_name
 
         if len(namespace) == 0:
